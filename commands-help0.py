@@ -17,6 +17,8 @@ def welcome_help(message):
 
 <b>Информационная автономность процессов.</b> Информация, предоставляемая субъектами, должна оставаться у них как в том виде, в котором она была предоставлена, так и в обработанном виде. При этом сам процесс сбора не должен дробиться на сбор и предоставление, а разрабатываться сразу как двусторонний.
 
+<b>Централизация информации.</b>. При планировании работы необходимо максимально обеспечить соответствие запрашиваемой информации существующей системе хранения или предусматривать возможность изменения системы для интеграции новой информации.
+
 <b>Автоматизация процессов.</b> При планировании работы необходимо рассматривать все доступные варианты автоматизации, начиная с наиболее подходящего существующей системе хранения. Прибегать к ручному сбору и обработке можно только в исключительных случаях.
 
 <b>Документация процессов.</b> Ключевые, постоянные процессы должны быть детально описаны. Доступ к документации должен быть открыт внутри организации для минимизации рисков.
@@ -59,7 +61,6 @@ def iq_callback(call):
         bot.answer_callback_query(call.id)
         bot.send_message(call.message.chat.id, 'Ну ладно, заходи позже :(')
 
-@bot.message_handler(func=lambda message: True)
 def get_ind1(message): #получаем ответ на вопрос 1  
     if message.text.isdigit(): #проверяем является ли ответ числом
         global itog
@@ -75,47 +76,91 @@ def get_ind1(message): #получаем ответ на вопрос 1
         return
 
 def get_ind2(message): #получаем ответ на вопрос 2
-    global itog
-    itog += int(message.text)
-    bot.send_message(message.from_user.id, 'Функциональная оптимизация')
-    bot.register_next_step_handler(message, get_ind3)
+    if message.text.isdigit(): #проверяем является ли ответ числом
+        global itog
+        itog += int(message.text)
+        bot.send_message(message.from_user.id, 'Функциональная оптимизация')
+        bot.register_next_step_handler(message, get_ind3)
+        return
+    elif message.text.isalpha(): #проверяем является ли ответ текстом        
+        bot.send_message(message.from_user.id, '<b>Иерархическая оптимизация.</b> Сбор информации должен осуществляться максимально близко к непосредственному носителю.', parse_mode= "HTML")
+        bot.send_message(message.from_user.id, 'Введи значение заново')
+        bot.register_next_step_handler(message, get_ind2)
+    else:    
+        return
 
 def get_ind3(message): #получаем ответ на вопрос 3
-    global itog
-    itog += int(message.text)
-    bot.send_message(message.from_user.id, 'Информационная автономность процессов')
-    bot.register_next_step_handler(message, get_ind4)
+    if message.text.isdigit(): #проверяем является ли ответ числом
+        global itog
+        itog += int(message.text)
+        bot.send_message(message.from_user.id, 'Информационная автономность процессов')
+        bot.register_next_step_handler(message, get_ind4)
+        return
+    elif message.text.isalpha(): #проверяем является ли ответ текстом 
+        bot.send_message(message.from_user.id, '<b>Функциональная оптимизация.</b> Исключить повторное привлечение субъектов к процессам, информация в рамках которых в наличии и актуальна, предоставлять существующую информацию по внешним запросам без привлечения субъектов.', parse_mode= "HTML")
+        bot.send_message(message.from_user.id, 'Введи значение заново')
+        bot.register_next_step_handler(message, get_ind3)
+    else:    
+        return
 
 def get_ind4(message): #получаем ответ на вопрос 4
-    global itog
-    itog += int(message.text)
-    bot.send_message(message.from_user.id, 'Централизация информации')
-    bot.register_next_step_handler(message, get_ind5)
+    if message.text.isdigit(): #проверяем является ли ответ числом
+        global itog
+        itog += int(message.text)
+        bot.send_message(message.from_user.id, 'Централизация информации')
+        bot.register_next_step_handler(message, get_ind5)
+    elif message.text.isalpha(): #проверяем является ли ответ текстом 
+        bot.send_message(message.from_user.id, '<b>Информационная автономность процессов.</b> Информация, предоставляемая субъектами, должна оставаться у них как в том виде, в котором она была предоставлена, так и в обработанном виде. При этом сам процесс сбора не должен дробиться на сбор и предоставление, а разрабатываться сразу как двусторонний.', parse_mode= "HTML")
+        bot.send_message(message.from_user.id, 'Введи значение заново')
+        bot.register_next_step_handler(message, get_ind4)
+    else:    
+        return        
 
 def get_ind5(message): #получаем ответ на вопрос 5
-    global itog
-    itog += int(message.text)
-    bot.send_message(message.from_user.id, 'Автоматизация процессов')
-    bot.register_next_step_handler(message, get_ind6)
+    if message.text.isdigit(): #проверяем является ли ответ числом
+        global itog
+        itog += int(message.text)
+        bot.send_message(message.from_user.id, 'Автоматизация процессов')
+        bot.register_next_step_handler(message, get_ind6)
+    elif message.text.isalpha(): #проверяем является ли ответ текстом 
+        bot.send_message(message.from_user.id, '<b>Централизация информации.</b>. При планировании работы необходимо максимально обеспечить соответствие запрашиваемой информации существующей системе хранения или предусматривать возможность изменения системы для интеграции новой информации.', parse_mode= "HTML")
+        bot.send_message(message.from_user.id, 'Введи значение заново')
+        bot.register_next_step_handler(message, get_ind5)
+    else:    
+        return
 
 def get_ind6(message): #получаем ответ на вопрос 6
-    global itog
-    itog += int(message.text)
-    bot.send_message(message.from_user.id, 'Документация процессов')
-    bot.register_next_step_handler(message, get_ind7)
+    if message.text.isdigit(): #проверяем является ли ответ числом
+        global itog
+        itog += int(message.text)
+        bot.send_message(message.from_user.id, 'Документация процессов')
+        bot.register_next_step_handler(message, get_ind7)
+    elif message.text.isalpha(): #проверяем является ли ответ текстом 
+        bot.send_message(message.from_user.id, '<b>Автоматизация процессов.</b> При планировании работы необходимо рассматривать все доступные варианты автоматизации, начиная с наиболее подходящего существующей системе хранения. Прибегать к ручному сбору и обработке можно только в исключительных случаях.', parse_mode= "HTML")
+        bot.send_message(message.from_user.id, 'Введи значение заново')
+        bot.register_next_step_handler(message, get_ind6)
+    else:    
+        return
 
 def get_ind7(message): #получаем ответ на вопрос 7
-    global itog
-    itog += int(message.text)
-    proc = int(round(itog*100/14))
-    bot.send_message(message.chat.id, 'Задача оценивается в ' + str(itog) + ' баллов и ИС равен ' + str(proc) + ' %.')
-    itog = 0
-    keyboard = types.InlineKeyboardMarkup(row_width=2)
-    key_yes = types.InlineKeyboardButton(text='Продолжить', callback_data='Да')
-    keyboard.add(key_yes)
-    key_no = types.InlineKeyboardButton(text='Закончить', callback_data='Нет')
-    keyboard.add(key_no)
-    bot.send_message(message.from_user.id, 'Всё? Или считать ещё раз?', reply_markup=keyboard)
+    if message.text.isdigit(): #проверяем является ли ответ числом
+        global itog
+        itog += int(message.text)
+        proc = int(round(itog*100/14))
+        bot.send_message(message.chat.id, 'Задача оценивается в ' + str(itog) + ' баллов и ИС равен ' + str(proc) + ' %.')
+        itog = 0        
+        keyboard = types.InlineKeyboardMarkup(row_width=2)
+        key_yes = types.InlineKeyboardButton(text='Продолжить', callback_data='Да')
+        keyboard.add(key_yes)
+        key_no = types.InlineKeyboardButton(text='Закончить', callback_data='Нет')
+        keyboard.add(key_no)
+        bot.send_message(message.from_user.id, 'Всё? Или считать ещё раз?', reply_markup=keyboard)
+    elif message.text.isalpha(): #проверяем является ли ответ текстом 
+        bot.send_message(message.from_user.id, '<b>Документация процессов.</b> Ключевые, постоянные процессы должны быть детально описаны. Доступ к документации должен быть открыт внутри организации для минимизации рисков.', parse_mode= "HTML")
+        bot.send_message(message.from_user.id, 'Введи значение заново')
+        bot.register_next_step_handler(message, get_ind7)
+    else:    
+        return    
 
 #Запускаем бота
 bot.polling(none_stop=True, interval=0)
